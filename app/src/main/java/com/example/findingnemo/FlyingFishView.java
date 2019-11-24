@@ -23,11 +23,15 @@ public class FlyingFishView extends View {
     private Paint scorePaint = new Paint();
     private Bitmap life[] = new Bitmap[2];
 
-    private int yellowX, yellowY, yellowSpeed = 13;
+    private int yellowX, yellowY, yellowSpeed = 8;
     private Paint yellowPaint = new Paint();
 
-    private int greenX, greenY, greenSpeed = 20;
+    private int greenX, greenY, greenSpeed = 13;
     private Paint greentPaint = new Paint();
+
+    private int redX, redY, redSpeed = 25;
+    private Paint redPaint = new Paint();
+
 
     private int score;
 
@@ -40,6 +44,12 @@ public class FlyingFishView extends View {
 
         yellowPaint.setColor(Color.YELLOW);
         yellowPaint.setAntiAlias(false);
+
+        greentPaint.setColor(Color.GREEN);
+        greentPaint.setAntiAlias(false);
+
+        redPaint.setColor(Color.RED);
+        redPaint.setAntiAlias(false);
 
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(60);
@@ -90,6 +100,31 @@ public class FlyingFishView extends View {
             yellowY = (int)Math.floor(Math.random() * (maxFishY-minFishY)) + minFishY;
         }
         canvas.drawCircle(yellowX,yellowY, 20, yellowPaint);
+
+
+        greenX = greenX - greenSpeed;
+
+        if(hitBallChecker(greenX,greenY)){
+            score = score + 20;
+            greenX = -100;
+        }
+        if(greenX < 0){
+            greenX = canvasWidth + 21;
+            greenY = (int)Math.floor(Math.random() * (maxFishY-minFishY)) + minFishY;
+        }
+        canvas.drawCircle(greenX,greenY, 15, greentPaint);
+
+        redX = redX - redSpeed;
+
+        if(hitBallChecker(redX,redY)){
+            redX = -100;
+        }
+        if(redX < 0){
+            redX = canvasWidth + 21;
+            redY = (int)Math.floor(Math.random() * (maxFishY-minFishY)) + minFishY;
+        }
+        canvas.drawCircle(redX,redY, 25, redPaint);
+
 
         canvas.drawText("Score : " + score, 20, 60, scorePaint);
 
