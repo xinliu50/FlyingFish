@@ -23,12 +23,24 @@ public class FlyingFishView extends View {
     private Paint scorePaint = new Paint();
     private Bitmap life[] = new Bitmap[2];
 
+    private int yellowX, yellowY, yellowSpeed = 13;
+    private Paint yellowPaint = new Paint();
+
+    private int greenX, greenY, greenSpeed = 20;
+    private Paint greentPaint = new Paint();
+
+    private int score;
+
     public FlyingFishView(Context context) {
         super(context);
         fish[0] = BitmapFactory.decodeResource(getResources(),R.drawable.fish1);
         fish[1] = BitmapFactory.decodeResource(getResources(),R.drawable.fish2);
 
         backgroundImage = BitmapFactory.decodeResource(getResources(),R.drawable.background);
+
+        yellowPaint.setColor(Color.YELLOW);
+        yellowPaint.setAntiAlias(false);
+
         scorePaint.setColor(Color.WHITE);
         scorePaint.setTextSize(60);
         scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
@@ -38,6 +50,7 @@ public class FlyingFishView extends View {
         life[1] = BitmapFactory.decodeResource(getResources(),R.drawable.heart_grey);
 
         fishy = 550;
+        score = 0;
     }
 
     @Override
@@ -66,11 +79,30 @@ public class FlyingFishView extends View {
         else{
             canvas.drawBitmap(fish[0],fishx, fishy,null);
         }
-        canvas.drawText("Score : ", 20, 60, scorePaint);
+        yellowX = yellowX - yellowSpeed;
+
+        if(hitBallChecker(yellowX,yellowY)){
+            score = score + 10;
+            yellowX = -100;
+        }
+        if(yellowX < 0){
+            yellowX = canvasWidth + 21;
+            yellowY = (int)Math.floor(Math.random() * (maxFishY-minFishY)) + minFishY;
+        }
+        canvas.drawCircle(yellowX,yellowY, 20, yellowPaint);
+
+        canvas.drawText("Score : " + score, 20, 60, scorePaint);
 
         canvas.drawBitmap(life[0],380,10,null);
         canvas.drawBitmap(life[0],480,10,null);
         canvas.drawBitmap(life[0],580,10,null);
+    }
+
+    public boolean hitBallChecker(int x, int y){
+        if(fishx < x && x < (fishx+fish[0].getWidth()) && fishy < y && y < (fishy+fish[0].getHeight())){
+            return true;
+        }
+        return false;
     }
 
     @Override
